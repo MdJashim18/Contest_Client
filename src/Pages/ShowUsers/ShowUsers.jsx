@@ -7,7 +7,7 @@ const ShowUsers = () => {
   const axiosSecure = UseAxiosSecure();
 
   // ================= Fetch Users =================
-  const fetchUsers = async () => {
+  const getAllUsers = async () => {
     try {
       const res = await axiosSecure.get("/users");
       setUsers(res.data);
@@ -17,7 +17,7 @@ const ShowUsers = () => {
   };
 
   useEffect(() => {
-    fetchUsers();
+    getAllUsers();
   }, []);
 
   // ================= Role Cycle Logic =================
