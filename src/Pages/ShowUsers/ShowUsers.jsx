@@ -1,78 +1,115 @@
 import React, { useEffect, useState } from "react";
 import UseAxiosSecure from "../../Hooks/UseAxiosSecure";
-import { FaUserShield } from "react-icons/fa";
-import { FiShieldOff } from "react-icons/fi";
+import { FaUser, FaUserTie, FaUserShield } from "react-icons/fa";
 
 const ShowUsers = () => {
   const [users, setUsers] = useState([]);
   const axiosSecure = UseAxiosSecure();
 
-  // Fetch all users from backend
-  const fetchUsers = () => {
-    axiosSecure.get("/users")
-      .then(res => setUsers(res.data))
-      .catch(err => console.log(err));
+  // ================= Fetch Users =================
+  const fetchUsers = async () => {
+    try {
+      const res = await axiosSecure.get("/users");
+      setUsers(res.data);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   useEffect(() => {
     fetchUsers();
   }, []);
 
-  // Handle role change
-  const handleRoleChange = (userId, newRole) => {
-    axiosSecure.patch(`/users/${userId}`, { role: newRole })
-      .then(() => {
-        // Update local state
-        setUsers(prev =>
-          prev.map(u => u._id === userId ? { ...u, role: newRole } : u)
-        );
-      })
-      .catch(err => console.log(err));
+  // ================= Role Cycle Logic =================
+  const getNextRole = (currentRole) => {
+    if (currentRole === "user") return "creator";
+    if (currentRole === "creator") return "admin";
+    return "user"; // admin → user
+  };
+
+  // ================= Handle Role Change =================
+  const handleRoleChange = async (user) => {
+    const updatedRole = getNextRole(user.role);
+
+    try {
+      await axiosSecure.patch(`/users/${user._id}`, {
+        role: updatedRole,
+      });
+
+      // Update UI instantly
+      setUsers((prevUsers) =>
+        prevUsers.map((u) =>
+          u._id === user._id ? { ...u, role: updatedRole } : u
+        )
+      );
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  // ================= Role Badge Style =================
+  const roleBadge = (role) => {
+    if (role === "admin") return "badge-success";
+    if (role === "creator") return "badge-warning";
+    return "badge-secondary";
+  };
+
+  // ================= Role Icon =================
+  const roleIcon = (role) => {
+    if (role === "admin") return <FaUserShield />;
+    if (role === "creator") return <FaUserTie />;
+    return <FaUser />;
   };
 
   return (
-    <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">All Users</h1>
+    <div className="p-6">
+      <h1 className="text-2xl font-bold mb-6">Manage Users</h1>
 
-      <table className="table-auto border border-gray-300 w-full">
-        <thead>
-          <tr className="bg-gray-100">
-            <th className="border px-4 py-2">#</th>
-            <th className="border px-4 py-2">Name</th>
-            <th className="border px-4 py-2">Email</th>
-            <th className="border px-4 py-2">Action</th>
-            <th className="border px-4 py-2">Role</th>
-          </tr>
-        </thead>
-
-        <tbody>
-          {users.map((user, index) => (
-            <tr key={user._id}>
-              <td className="border px-4 py-2">{index + 1}</td>
-              <td className="border px-4 py-2">{user.displayName}</td>
-              <td className="border px-4 py-2">{user.email}</td>
-              <td className="border px-4 py-2 text-center">
-                {user.role === "admin" ? (
-                  <button
-                    className="btn btn-sm btn-warning flex items-center justify-center"
-                    onClick={() => handleRoleChange(user._id, "user")}
-                  >
-                    <FiShieldOff className="mr-1" /> Demote
-                  </button>
-                ) : (
-                  <button
-                    className="btn btn-sm btn-primary flex items-center justify-center"
-                    onClick={() => handleRoleChange(user._id, "admin")}
-                  >
-                    <FaUserShield className="mr-1" /> Promote
-                  </button>
-                )}
-              </td>
-              <td className="border px-4 py-2">{user.role}</td>
+      <div className="overflow-x-auto">
+        <table className="table w-full border">
+          <thead className="bg-gray-100">
+            <tr>
+              <th>#</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Role</th>
+              <th className="text-center">Action</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+
+          <tbody>
+            {users.map((user, index) => (
+              <tr key={user._id}>
+                <td>{index + 1}</td>
+                <td>{user.displayName || "N/A"}</td>
+                <td>{user.email}</td>
+
+                <td>
+                  <span className={`badge ${roleBadge(user.role)}`}>
+                    {user.role}
+                  </span>
+                </td>
+
+                <td className="text-center">
+                  <button
+                    onClick={() => handleRoleChange(user)}
+                    className="btn btn-sm btn-outline flex items-center gap-2 mx-auto"
+                  >
+                    {roleIcon(user.role)}
+                    Change Role
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+
+        {users.length === 0 && (
+          <p className="text-center mt-6 text-gray-500">
+            No users found
+          </p>
+        )}
+      </div>
     </div>
   );
 };
