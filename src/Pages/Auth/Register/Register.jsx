@@ -3,10 +3,12 @@ import { useForm } from 'react-hook-form';
 import useAuth from '../../../Hooks/useAuth';
 import { Link, useLocation, useNavigate } from 'react-router';
 import axios from 'axios';
+import UseAxiosSecure from '../../../Hooks/UseAxiosSecure';
 
 const Register = () => {
     const location = useLocation();
     const navigate = useNavigate();
+    const axiosSecure = UseAxiosSecure()
 
     const {
         register,
@@ -28,9 +30,23 @@ const Register = () => {
 
                 axios.post(imageApiUrl, formData)
                     .then(res => {
+                        const photoURL = res.data.data.url
+
+                        const userInfo = {
+                            email: data.email,
+                            displayName: data.name,
+                            photoURL: photoURL,
+                        }
+
+                        axiosSecure.post('/users',userInfo)
+                         .then(res=>{
+                            if(res.data.insertedId){
+                                console.log("User Created in the database")
+                            }
+                         })
                         const userProfile = {
                             displayName: data.name,
-                            photoURL: res.data.data.url,
+                            photoURL: photoURL,
                         };
 
                         updateUserProfile(userProfile)
