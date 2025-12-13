@@ -11,10 +11,10 @@ const Footer = () => {
   return (
     <footer className="bg-base-200 text-base-content">
       <div className="max-w-7xl mx-auto px-6 py-14">
-        {/* TOP SECTION */}
+       
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10 items-start">
 
-          {/* BRAND */}
+         
           <div className="space-y-4">
             <Logo />
             <p className="text-sm opacity-80 leading-relaxed">
@@ -23,7 +23,7 @@ const Footer = () => {
             </p>
           </div>
 
-          {/* QUICK LINKS */}
+         
           <div>
             <h3 className="footer-title mb-4">Quick Links</h3>
             <ul className="space-y-2 text-sm">
@@ -34,11 +34,11 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* SOCIAL + NEWSLETTER */}
+          
           <div>
             <h3 className="footer-title mb-4">Connect With Us</h3>
 
-            {/* SOCIAL ICONS */}
+           
             <div className="flex gap-4 mb-6">
               <a className="btn btn-circle btn-outline hover:scale-110 transition">
                 <FaFacebookF />
@@ -54,7 +54,7 @@ const Footer = () => {
               </a>
             </div>
 
-            {/* NEWSLETTER */}
+            
             <div className="form-control w-full max-w-xs">
               <label className="label text-sm">
                 Subscribe to our newsletter
@@ -73,10 +73,10 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* DIVIDER */}
+        
         <div className="divider my-10"></div>
 
-        {/* BOTTOM BAR */}
+       
         <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm opacity-70">
           <p>
             © {new Date().getFullYear()} ACME Industries Ltd. All rights reserved.
