@@ -15,6 +15,7 @@ import UserDashboard from "../Pages/Dashboard/UserDashboard";
 
 import Rider from "../Pages/Rider/Rider";
 import ShowUsers from "../Pages/ShowUsers/ShowUsers";
+import AllContestAdmin from "../Pages/AllContestAdmin/AllContestAdmin";
 
 export const router = createBrowserRouter([
   // ================= PUBLIC =================
@@ -78,6 +79,10 @@ export const router = createBrowserRouter([
 
       
       { path: "user", element: <UserDashboard /> },
+      {
+        path:'admin/All-Contest',
+        element:<AllContestAdmin></AllContestAdmin>
+      }
     ],
   },
 ]);

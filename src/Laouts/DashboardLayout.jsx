@@ -65,7 +65,7 @@ const DashboardLayout = () => {
                   <NavLink to="admin"> Admin Dashboard</NavLink>
                 </li>
                 <li>
-                  <NavLink to="admin/manage-users"> Manage Users</NavLink>
+                  <NavLink to="admin/All-Contest">All Contest</NavLink>
                 </li>
                 <li>
                   <NavLink to="admin/manage-contests"> Manage Contests</NavLink>
