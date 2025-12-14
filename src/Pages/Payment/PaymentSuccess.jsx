@@ -13,17 +13,21 @@ const PaymentSuccess = () => {
       axiosSecure.patch('/payment-success', { sessionId })
         .then(() => {
           setTimeout(() => {
-            navigate('/'); // or contest details page
+            navigate('/'); 
           }, 2000);
         });
     }
   }, [sessionId]);
+
+  
 
   return (
     <div className="flex justify-center items-center h-screen">
       <h2 className="text-4xl text-green-600 font-bold">
         ✅ Payment Successful!
       </h2>
+
+      
     </div>
   );
 };

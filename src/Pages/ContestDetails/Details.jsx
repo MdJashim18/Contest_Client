@@ -55,12 +55,12 @@ const Details = () => {
     return () => clearInterval(interval);
   }, [contest]);
 
-  // Handle register → go to payment page
+  
   const handleRegister = async () => {
     if (!user) return navigate("/login");
 
     try {
-      // Redirect to payment page with contest ID
+      
       navigate(`/payment/${id}`);
     } catch (err) {
       console.error(err);
