@@ -10,15 +10,16 @@ const ContestDetails = () => {
     const [isRegistered, setIsRegistered] = useState(false);
     const [taskText, setTaskText] = useState('');
     const [timeLeft, setTimeLeft] = useState('');
+    console.log(contest)
 
-    // ================= Fetch Contest =================
+   
     useEffect(() => {
         axiosSecure.get(`/contest/${id}`)
             .then(res => setContest(res.data))
             .catch(err => console.error(err));
     }, [axiosSecure, id]);
 
-    // ================= Countdown =================
+    
     useEffect(() => {
         if (!contest) return;
 
@@ -67,7 +68,7 @@ const ContestDetails = () => {
         <div className="max-w-5xl mx-auto p-6">
             {/* Banner */}
             <img
-                src={contest.image}
+                src={contest?.image}
                 alt="Contest Banner"
                 className="w-full h-80 object-cover rounded-lg mb-6"
             />
