@@ -18,6 +18,9 @@ import ShowUsers from "../Pages/ShowUsers/ShowUsers";
 import AllContestAdmin from "../Pages/AllContestAdmin/AllContestAdmin";
 import ContestDetails from "../Pages/Details/ContestDetails";
 import AllContests from "../Pages/AllContests/AllContests";
+import Details from "../Pages/ContestDetails/Details";
+
+
 
 export const router = createBrowserRouter([
   // ================= PUBLIC =================
@@ -40,8 +43,12 @@ export const router = createBrowserRouter([
         ),
       },
       {
-        path:'all-contests',
+        path:'/all-contests',
         element:<AllContests></AllContests>
+      },
+      {
+        path:'/details/:id',
+        element:<Details></Details>
       }
     ],
   },

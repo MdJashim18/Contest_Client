@@ -11,44 +11,40 @@ const PopularContests = () => {
     const [contests, setContests] = useState([]);
     
 
-    // ================= Fetch Popular Contests =================
     useEffect(() => {
         axiosSecure.get('/contest')
             .then(res => {
-                // Sort by highest participants count
                 const sorted = res.data.sort(
                     (a, b) => (b.participantsCount || 0) - (a.participantsCount || 0)
                 );
-
-                // Show top 6 popular contests
                 setContests(sorted.slice(0, 6));
             })
             .catch(err => console.error(err));
     }, [axiosSecure]);
 
-    // ================= Handle Details =================
+ 
     const handleDetails = (id) => {
         if (!user) {
             navigate('/login');
         } else {
-            navigate(`/contest/${id}`);
+            navigate(`/Details/${id}`);
         }
     };
 
     return (
         <div className="max-w-7xl mx-auto px-6 py-10">
             <h1 className="text-3xl font-bold mb-6 text-center">
-                🔥 Popular Contests
+                 Popular Contests
             </h1>
 
-            {/* Cards */}
+          
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {contests.map(contest => (
                     <div
                         key={contest._id}
                         className="card bg-base-100 shadow-lg hover:shadow-xl transition"
                     >
-                        {/* Image */}
+                      
                         <figure>
                             <img
                                 src={contest.image}
@@ -86,7 +82,7 @@ const PopularContests = () => {
                 ))}
             </div>
 
-            {/* Show All */}
+            
             <div className="text-center mt-8">
                 <Link
                     to='all-contests'
