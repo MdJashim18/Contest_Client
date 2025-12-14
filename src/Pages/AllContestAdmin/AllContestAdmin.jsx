@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import UseAxiosSecure from '../../Hooks/UseAxiosSecure';
 import Swal from 'sweetalert2';
+import { Link } from 'react-router';
 
 const AllContestAdmin = () => {
     const axiosSecure = UseAxiosSecure();
@@ -83,6 +84,7 @@ const AllContestAdmin = () => {
                             <th>Prize</th>
                             <th>Status</th>
                             <th>Actions</th>
+                            <th>Details</th>
                         </tr>
                     </thead>
 
@@ -96,13 +98,12 @@ const AllContestAdmin = () => {
                                 <td>${contest.prizeMoney}</td>
                                 <td>
                                     <span
-                                        className={`badge ${
-                                            contest.status === 'approved'
+                                        className={`badge ${contest.status === 'approved'
                                                 ? 'badge-success'
                                                 : contest.status === 'rejected'
-                                                ? 'badge-error'
-                                                : 'badge-warning'
-                                        }`}
+                                                    ? 'badge-error'
+                                                    : 'badge-warning'
+                                            }`}
                                     >
                                         {contest.status || 'pending'}
                                     </span>
@@ -130,6 +131,14 @@ const AllContestAdmin = () => {
                                     >
                                         Delete
                                     </button>
+                                </td>
+                                <td>
+                                    <Link
+                                        to = {`/dashboard/contest/${contest._id}`}
+                                        className="btn btn-xs btn-info"
+                                    >
+                                        Details
+                                    </Link>
                                 </td>
                             </tr>
                         ))}

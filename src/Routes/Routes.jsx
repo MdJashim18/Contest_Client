@@ -16,6 +16,7 @@ import UserDashboard from "../Pages/Dashboard/UserDashboard";
 import Rider from "../Pages/Rider/Rider";
 import ShowUsers from "../Pages/ShowUsers/ShowUsers";
 import AllContestAdmin from "../Pages/AllContestAdmin/AllContestAdmin";
+import ContestDetails from "../Pages/Details/ContestDetails";
 
 export const router = createBrowserRouter([
   // ================= PUBLIC =================
@@ -45,17 +46,17 @@ export const router = createBrowserRouter([
     path: "/",
     Component: AuthLayouts,
     children: [
-      { 
+      {
         path: "login",
-        Component: Login 
-      },
-      { 
-        path: "register", 
-        Component: Register 
+        Component: Login
       },
       {
-        path:'/allUsers',
-        Component:ShowUsers
+        path: "register",
+        Component: Register
+      },
+      {
+        path: '/allUsers',
+        Component: ShowUsers
       }
     ],
   },
@@ -71,17 +72,21 @@ export const router = createBrowserRouter([
     children: [
       { index: true, element: <Dashboard /> },
 
-      
+
       { path: "admin", element: <AdminDashboard /> },
 
-      
+
       { path: "creator", element: <CreatorDashboard /> },
 
-      
+
       { path: "user", element: <UserDashboard /> },
       {
-        path:'admin/All-Contest',
-        element:<AllContestAdmin></AllContestAdmin>
+        path: 'admin/All-Contest',
+        element: <AllContestAdmin></AllContestAdmin>
+      },
+      {
+        path: 'contest/:id',
+        element: <ContestDetails></ContestDetails>
       }
     ],
   },
