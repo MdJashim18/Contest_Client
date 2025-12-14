@@ -42,7 +42,7 @@ const ContestDetails = () => {
         return () => clearInterval(interval);
     }, [contest]);
 
-    // ================= Register =================
+    
     const handleRegister = () => {
         setIsRegistered(true);
         setContest(prev => ({
@@ -51,7 +51,7 @@ const ContestDetails = () => {
         }));
     };
 
-    // ================= Submit Task =================
+  
     const handleSubmitTask = () => {
         console.log('Task Submitted:', taskText);
 
@@ -66,44 +66,48 @@ const ContestDetails = () => {
 
     return (
         <div className="max-w-5xl mx-auto p-6">
-            {/* Banner */}
+           
             <img
                 src={contest?.image}
                 alt="Contest Banner"
                 className="w-full h-80 object-cover rounded-lg mb-6"
             />
 
-            {/* Title */}
+            
             <h1 className="text-3xl font-bold mb-2">{contest.name}</h1>
 
-            {/* Countdown */}
+           
             <p className="text-red-500 font-semibold mb-4">
                 {timeLeft}
             </p>
 
-            {/* Participants */}
+          
             <p className="font-medium mb-2">
                 Participants: {contest.participantsCount || 0}
             </p>
 
-            {/* Prize */}
+            
+            <p className="font-bold text-lg mb-4">
+                Registration Fee: ${contest.price}
+            </p>
+           
             <p className="font-bold text-lg mb-4">
                 Prize Money: ${contest.prizeMoney}
             </p>
 
-            {/* Description */}
+            
             <div className="mb-4">
                 <h3 className="font-semibold text-lg">Contest Description</h3>
                 <p className="text-gray-700">{contest.description}</p>
             </div>
 
-            {/* Task */}
+           
             <div className="mb-4">
                 <h3 className="font-semibold text-lg">Task Instructions</h3>
                 <p className="text-gray-700">{contest.taskInstruction}</p>
             </div>
 
-            {/* Winner */}
+           
             {contest.winner && (
                 <div className="border p-4 rounded-lg mb-4">
                     <h3 className="font-semibold text-lg mb-2">Winner</h3>
@@ -118,7 +122,6 @@ const ContestDetails = () => {
                 </div>
             )}
 
-            {/* Register Button */}
             {!isRegistered && timeLeft !== 'Contest Ended' && (
                 <button
                     onClick={handleRegister}
@@ -128,7 +131,7 @@ const ContestDetails = () => {
                 </button>
             )}
 
-            {/* Submit Task */}
+            
             {isRegistered && timeLeft !== 'Contest Ended' && (
                 <button
                     onClick={() =>
@@ -140,14 +143,13 @@ const ContestDetails = () => {
                 </button>
             )}
 
-            {/* Contest Ended */}
+            
             {timeLeft === 'Contest Ended' && (
                 <p className="text-center text-gray-500 mt-4">
                     Contest has ended.
                 </p>
             )}
 
-            {/* Submit Task Modal */}
             <dialog id="submit_task_modal" className="modal">
                 <div className="modal-box">
                     <h3 className="font-bold text-lg mb-2">
