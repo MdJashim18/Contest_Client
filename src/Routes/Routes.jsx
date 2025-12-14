@@ -13,12 +13,15 @@ import AdminDashboard from "../Pages/Dashboard/AdminDashboard";
 import CreatorDashboard from "../Pages/Dashboard/CreatorDashboard";
 import UserDashboard from "../Pages/Dashboard/UserDashboard";
 
-import Rider from "../Pages/Rider/Rider";
+
 import ShowUsers from "../Pages/ShowUsers/ShowUsers";
 import AllContestAdmin from "../Pages/AllContestAdmin/AllContestAdmin";
 import ContestDetails from "../Pages/Details/ContestDetails";
 import AllContests from "../Pages/AllContests/AllContests";
 import Details from "../Pages/ContestDetails/Details";
+import Payment from "../Pages/Payment/Payment";
+import PaymentSuccess from "../Pages/Payment/PaymentSuccess";
+import PaymentCancelled from "../Pages/Payment/PaymentCancelled";
 
 
 
@@ -35,20 +38,28 @@ export const router = createBrowserRouter([
         loader: () => fetch("/warehouses.json").then(res => res.json()),
       },
       {
-        path: "rider",
+        path: '/all-contests',
+        element: <AllContests></AllContests>
+      },
+      {
+        path: '/details/:id',
+        element: <Details></Details>
+      },
+      {
+        path: '/payment/:id',
+        element: <Payment></Payment>
+      },
+      {
+        path: "/payment-success",
         element: (
           <PrivateRouter>
-            <Rider />
+            <PaymentSuccess></PaymentSuccess>
           </PrivateRouter>
-        ),
+        )
       },
       {
-        path:'/all-contests',
-        element:<AllContests></AllContests>
-      },
-      {
-        path:'/details/:id',
-        element:<Details></Details>
+        path: "/payment-cancelled",
+        element:<PaymentCancelled></PaymentCancelled>
       }
     ],
   },
@@ -100,7 +111,7 @@ export const router = createBrowserRouter([
         path: 'contest/:id',
         element: <ContestDetails></ContestDetails>
       },
-      
+
     ],
   },
 ]);

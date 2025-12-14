@@ -62,7 +62,7 @@ const PopularContests = () => {
                             </h2>
 
                             <p className="text-sm text-gray-600">
-                                👥 Participants: {contest.participantsCount || 0}
+                                Participants: {contest.participantsCount || 0}
                             </p>
 
                             <p className="text-gray-700">

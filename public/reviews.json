@@ -1,5 +1,5 @@
 [
- {
+  {
     "name": "UI/UX Design Contest",
     "image": "https://ibb.co.com/fGVrjCn5",
     "description": "Design a modern and user-friendly mobile app interface. This competition focuses on creating intuitive user experiences through thoughtful design decisions. Participants must design a complete mobile application interface that addresses a real-world problem, following Material Design or Apple Human Interface guidelines while maintaining originality. Emphasis should be placed on user flow, information architecture, visual hierarchy, and accessibility features. Designers must consider different user personas and create solutions that cater to diverse needs, including proper contrast ratios, readable typography, and intuitive navigation patterns that enhance user satisfaction and engagement.",
@@ -7,7 +7,12 @@
     "prizeMoney": 4000,
     "taskInstruction": "Design 5 mobile app screens using Figma.",
     "contestType": "Design",
-    "deadline": "2025-12-23"
+    "deadline": "2025-12-23T23:59:59.000Z",
+    "participantsCount": 0,
+    "participants": [],
+    "winner": null,
+    "status": "pending",
+    "createdAt": "2025-12-14T00:00:00.000Z"
   },
   {
     "name": "React Coding Battle",
@@ -17,7 +22,12 @@
     "prizeMoney": 10000,
     "taskInstruction": "Solve 3 React-based coding problems.",
     "contestType": "Programming",
-    "deadline": "2025-12-22"
+    "deadline": "2025-12-22T23:59:59.000Z",
+    "participantsCount": 0,
+    "participants": [],
+    "winner": null,
+    "status": "pending",
+    "createdAt": "2025-12-14T00:00:00.000Z"
   },
   {
     "name": "Logo Design Sprint",
@@ -27,7 +37,12 @@
     "prizeMoney": 4000,
     "taskInstruction": "Submit a vector logo in SVG or AI format.",
     "contestType": "Design",
-    "deadline": "2025-12-20"
+    "deadline": "2025-12-20T23:59:59.000Z",
+    "participantsCount": 0,
+    "participants": [],
+    "winner": null,
+    "status": "pending",
+    "createdAt": "2025-12-14T00:00:00.000Z"
   },
   {
     "name": "Python Algorithm Contest",
@@ -37,7 +52,12 @@
     "prizeMoney": 40000,
     "taskInstruction": "Solve 5 algorithm problems within the time limit.",
     "contestType": "Programming",
-    "deadline": "2025-12-21"
+    "deadline": "2025-12-21T23:59:59.000Z",
+    "participantsCount": 0,
+    "participants": [],
+    "winner": null,
+    "status": "pending",
+    "createdAt": "2025-12-14T00:00:00.000Z"
   },
   {
     "name": "Content Writing Marathon",
@@ -47,7 +67,12 @@
     "prizeMoney": 35000,
     "taskInstruction": "Write a 1200-word tech article (original content).",
     "contestType": "Writing",
-    "deadline": "2025-12-19"
+    "deadline": "2025-12-19T23:59:59.000Z",
+    "participantsCount": 0,
+    "participants": [],
+    "winner": null,
+    "status": "pending",
+    "createdAt": "2025-12-14T00:00:00.000Z"
   },
   {
     "name": "Photography Competition",
@@ -57,7 +82,12 @@
     "prizeMoney": 25000,
     "taskInstruction": "Submit 3 high-resolution photos.",
     "contestType": "Photography",
-    "deadline": "2025-12-18"
+    "deadline": "2025-12-18T23:59:59.000Z",
+    "participantsCount": 0,
+    "participants": [],
+    "winner": null,
+    "status": "pending",
+    "createdAt": "2025-12-14T00:00:00.000Z"
   },
   {
     "name": "Machine Learning Mini Project",
@@ -67,7 +97,12 @@
     "prizeMoney": 80000,
     "taskInstruction": "Create a classification model and submit a GitHub repo.",
     "contestType": "Data Science",
-    "deadline": "2025-12-28"
+    "deadline": "2025-12-28T23:59:59.000Z",
+    "participantsCount": 0,
+    "participants": [],
+    "winner": null,
+    "status": "pending",
+    "createdAt": "2025-12-14T00:00:00.000Z"
   },
   {
     "name": "Mobile App UI Contest",
@@ -77,7 +112,12 @@
     "prizeMoney": 42000,
     "taskInstruction": "Design Android app UI screens in Figma.",
     "contestType": "Design",
-    "deadline": "2025-12-24"
+    "deadline": "2025-12-24T23:59:59.000Z",
+    "participantsCount": 0,
+    "participants": [],
+    "winner": null,
+    "status": "pending",
+    "createdAt": "2025-12-14T00:00:00.000Z"
   },
   {
     "name": "Web Development Challenge",
@@ -87,7 +127,12 @@
     "prizeMoney": 500,
     "taskInstruction": "Create a responsive website using React and Tailwind CSS.",
     "contestType": "Development",
-    "deadline": "2025-12-25"
+    "deadline": "2025-12-25T23:59:59.000Z",
+    "participantsCount": 0,
+    "participants": [],
+    "winner": null,
+    "status": "pending",
+    "createdAt": "2025-12-14T00:00:00.000Z"
   },
   {
     "name": "Database Design Challenge",
@@ -97,7 +142,11 @@
     "prizeMoney": 80000,
     "taskInstruction": "Create ER diagram and SQL schema.",
     "contestType": "Database",
-    "deadline": "2025-12-26"
+    "deadline": "2025-12-26T23:59:59.000Z",
+    "participantsCount": 0,
+    "participants": [],
+    "winner": null,
+    "status": "pending",
+    "createdAt": "2025-12-14T00:00:00.000Z"
   }
 ]
-
