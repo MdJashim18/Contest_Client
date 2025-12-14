@@ -22,15 +22,11 @@ const Navbar = () => {
   const links = (
     <>
       <li><NavLink to="/">Home</NavLink></li>
-      <li><NavLink to="/allFoods">All Contests</NavLink></li>
+      <li><NavLink to="/all-contests">All Contests</NavLink></li>
       <li><NavLink to="/">Extra Section</NavLink></li>
       
 
-      {/* {user && !loading && (
-        <li>
-          <NavLink to={dashboardPath}>Dashboard</NavLink>
-        </li>
-      )} */}
+      
       {user && role==="admin" && (
         <li><NavLink to="/allUsers">All Users</NavLink></li>
       )}

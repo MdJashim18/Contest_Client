@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import UseAxiosSecure from '../../../Hooks/UseAxiosSecure';
 import useAuth from '../../../Hooks/useAuth';
 
@@ -9,6 +9,7 @@ const PopularContests = () => {
     const { user } = useAuth();
 
     const [contests, setContests] = useState([]);
+    
 
     // ================= Fetch Popular Contests =================
     useEffect(() => {
@@ -53,10 +54,12 @@ const PopularContests = () => {
                                 src={contest.image}
                                 alt={contest.name}
                                 className="h-48 w-full object-cover"
+                                
                             />
+
                         </figure>
 
-                        {/* Content */}
+                       
                         <div className="card-body">
                             <h2 className="card-title">
                                 {contest.name}
@@ -85,12 +88,12 @@ const PopularContests = () => {
 
             {/* Show All */}
             <div className="text-center mt-8">
-                <button
-                    onClick={() => navigate('/contests')}
+                <Link
+                    to='all-contests'
                     className="btn btn-outline btn-primary"
                 >
                     Show All Contests
-                </button>
+                </Link>
             </div>
         </div>
     );

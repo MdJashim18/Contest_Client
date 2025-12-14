@@ -17,6 +17,7 @@ import Rider from "../Pages/Rider/Rider";
 import ShowUsers from "../Pages/ShowUsers/ShowUsers";
 import AllContestAdmin from "../Pages/AllContestAdmin/AllContestAdmin";
 import ContestDetails from "../Pages/Details/ContestDetails";
+import AllContests from "../Pages/AllContests/AllContests";
 
 export const router = createBrowserRouter([
   // ================= PUBLIC =================
@@ -38,6 +39,10 @@ export const router = createBrowserRouter([
           </PrivateRouter>
         ),
       },
+      {
+        path:'all-contests',
+        element:<AllContests></AllContests>
+      }
     ],
   },
 
@@ -87,7 +92,8 @@ export const router = createBrowserRouter([
       {
         path: 'contest/:id',
         element: <ContestDetails></ContestDetails>
-      }
+      },
+      
     ],
   },
 ]);
