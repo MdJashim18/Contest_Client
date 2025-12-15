@@ -22,6 +22,7 @@ import Details from "../Pages/ContestDetails/Details";
 import Payment from "../Pages/Payment/Payment";
 import PaymentSuccess from "../Pages/Payment/PaymentSuccess";
 import PaymentCancelled from "../Pages/Payment/PaymentCancelled";
+import UserProfile from "../Pages/UserProfile/UserProfile";
 
 
 
@@ -111,6 +112,10 @@ export const router = createBrowserRouter([
         path: 'contest/:id',
         element: <ContestDetails></ContestDetails>
       },
+      {
+        path:'user-profile',
+        element:<UserProfile></UserProfile>
+      }
 
     ],
   },

@@ -8,7 +8,6 @@ const PaymentSuccess = () => {
     const axiosSecure = UseAxiosSecure();
     const navigate = useNavigate();
     const [sessionData, setSessionData] = useState(null);
-    console.log(sessionData)
 
     useEffect(() => {
         if (sessionId) {
@@ -20,16 +19,23 @@ const PaymentSuccess = () => {
 
     const handleCompleteRegistration = async () => {
         try {
-            if (!sessionData?.userEmail) {
-                return alert("User info missing");
-            }
+            if (!sessionData?.userEmail) return alert("User info missing");
 
-            // Patch contest participants array
+            // Patch contest participants
             const res = await axiosSecure.patch(`/contest/register/${sessionData.contestId}`, {
                 userEmail: sessionData.userEmail
             });
 
             if (res.status === 200) {
+                // ✅ Save info in localStorage
+                localStorage.setItem(
+                    'registeredContest',
+                    JSON.stringify({
+                        contestId: sessionData.contestId,
+                        userEmail: sessionData.userEmail
+                    })
+                );
+
                 alert("Registration completed successfully!");
                 navigate(`/details/${sessionData.contestId}`);
             }

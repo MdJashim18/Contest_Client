@@ -14,7 +14,7 @@ const DashboardLayout = () => {
     <div className="drawer lg:drawer-open max-w-7xl mx-auto">
       <input id="dashboard-drawer" type="checkbox" className="drawer-toggle" />
 
-     
+
       <div className="drawer-content flex flex-col">
         <nav className="navbar bg-base-300">
           <label htmlFor="dashboard-drawer" className="btn btn-ghost lg:hidden">
@@ -41,11 +41,23 @@ const DashboardLayout = () => {
             </li>
 
             {role === "user" && (
-              <li>
-                <NavLink to="user">
-                  <CiDeliveryTruck />My Contest
-                </NavLink>
-              </li>
+              <>
+                <li>
+                  <NavLink to="/dashboard/user-profile">
+                    <CiDeliveryTruck />My Profile
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink to="user">
+                    <CiDeliveryTruck />My Contest
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink to="user">
+                    <CiDeliveryTruck />My Winning
+                  </NavLink>
+                </li>
+              </>
             )}
 
             {role === "creator" && (
