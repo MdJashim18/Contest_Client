@@ -23,6 +23,7 @@ import Payment from "../Pages/Payment/Payment";
 import PaymentSuccess from "../Pages/Payment/PaymentSuccess";
 import PaymentCancelled from "../Pages/Payment/PaymentCancelled";
 import UserProfile from "../Pages/UserProfile/UserProfile";
+import UserParticipants from "../Pages/UserParticipants/UserParticipants";
 
 
 
@@ -115,6 +116,10 @@ export const router = createBrowserRouter([
       {
         path:'user-profile',
         element:<UserProfile></UserProfile>
+      },
+      {
+        path:'UserParticipants',
+        element:<UserParticipants></UserParticipants>
       }
 
     ],

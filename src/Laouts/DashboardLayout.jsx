@@ -49,12 +49,12 @@ const DashboardLayout = () => {
                 </li>
                 <li>
                   <NavLink to="user">
-                    <CiDeliveryTruck />My Contest
+                    <CiDeliveryTruck />My Winning 
                   </NavLink>
                 </li>
                 <li>
-                  <NavLink to="user">
-                    <CiDeliveryTruck />My Winning
+                  <NavLink to="/dashboard/UserParticipants">
+                    <CiDeliveryTruck />My Contest
                   </NavLink>
                 </li>
               </>
