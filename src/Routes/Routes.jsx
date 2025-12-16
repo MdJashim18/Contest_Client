@@ -24,6 +24,9 @@ import PaymentSuccess from "../Pages/Payment/PaymentSuccess";
 import PaymentCancelled from "../Pages/Payment/PaymentCancelled";
 import UserProfile from "../Pages/UserProfile/UserProfile";
 import UserParticipants from "../Pages/UserParticipants/UserParticipants";
+import UserWinning from "../Pages/UserWinning/UserWinning";
+import CreateContest from "../Pages/CreateContest/CreateContest";
+import ShowContestTable from "../Pages/AllContests/ShowContestTable";
 
 
 
@@ -120,6 +123,18 @@ export const router = createBrowserRouter([
       {
         path:'UserParticipants',
         element:<UserParticipants></UserParticipants>
+      },
+      {
+        path:'UserWinning',
+        element:<UserWinning></UserWinning>
+      },
+      {
+        path:'CreateContest',
+        element:<CreateContest></CreateContest>
+      },
+      {
+        path:'ShowContestTable',
+        element:<ShowContestTable></ShowContestTable>
       }
 
     ],

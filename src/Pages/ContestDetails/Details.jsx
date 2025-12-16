@@ -12,6 +12,7 @@ const Details = () => {
     const [contest, setContest] = useState(null);
     const [isRegistered, setIsRegistered] = useState(false);
     const [taskText, setTaskText] = useState("");
+    const [taskName, setTaskName] = useState("Task 1"); // Example task name
     const [timeLeft, setTimeLeft] = useState("");
     const [isSubmitDisabled, setIsSubmitDisabled] = useState(false);
 
@@ -20,12 +21,20 @@ const Details = () => {
         if (!user) navigate("/login");
     }, [user, navigate]);
 
-    // Fetch contest data & check localStorage
+    // Fetch contest data & check registration
     useEffect(() => {
         if (!id) return;
 
         axiosSecure.get(`/contest/${id}`)
-            .then(res => setContest(res.data))
+            .then(res => {
+                setContest(res.data);
+
+                // Check if user already submitted task
+                const participant = res.data.participants.find(p => p.userEmail === user?.email);
+                if (participant && participant.taskSubmission) {
+                    setIsSubmitDisabled(true);
+                }
+            })
             .catch(err => console.error(err));
 
         const registeredData = JSON.parse(localStorage.getItem('registeredContest'));
@@ -47,7 +56,7 @@ const Details = () => {
                 setTimeLeft("Contest Ended");
                 clearInterval(interval);
 
-                // ✅ Remove registration info when contest ends
+                // Remove registration info when contest ends
                 const registeredData = JSON.parse(localStorage.getItem('registeredContest'));
                 if (registeredData?.contestId === id && registeredData.userEmail === user?.email) {
                     localStorage.removeItem('registeredContest');
@@ -74,24 +83,35 @@ const Details = () => {
     const handleSubmitTask = async () => {
         if (!taskText) return alert("Please provide task links");
 
+        if (!id) return alert("Contest ID missing");
+
         try {
             const res = await axiosSecure.patch(`/contest/submit-task/${id}`, {
-                userId: user._id,
+                taskName,
+                userEmail: user.email,
                 taskSubmission: taskText
             });
 
             if (res.status === 200) {
                 alert("Task submitted successfully");
                 setTaskText("");
-                setIsSubmitDisabled(true); // ✅ disable button after submit
+                setIsSubmitDisabled(true);
                 document.getElementById("submit_task_modal").close();
 
-                setContest(prev => ({
-                    ...prev,
-                    participants: prev.participants.map(p =>
-                        p.userId === user._id ? { ...p, taskSubmission: taskText } : p
-                    )
-                }));
+                // Update local contest state
+                setContest(prev => {
+                    const updatedTasks = { ...prev.tasks } || {};
+                    if (!updatedTasks[taskName]) updatedTasks[taskName] = [];
+                    updatedTasks[taskName].push({ userEmail: user.email, task: taskText });
+
+                    const updatedParticipants = prev.participants.map(p =>
+                        p.userEmail === user.email
+                            ? { ...p, taskSubmission: taskText }
+                            : p
+                    );
+
+                    return { ...prev, tasks: updatedTasks, participants: updatedParticipants };
+                });
             }
         } catch (err) {
             console.error(err);
@@ -129,7 +149,6 @@ const Details = () => {
                 </div>
             )}
 
-            {/* Buttons */}
             {!isRegistered && timeLeft !== "Contest Ended" && (
                 <button onClick={handleRegister} className="btn btn-success w-full mb-3">
                     Register / Pay
@@ -140,7 +159,7 @@ const Details = () => {
                 <button
                     onClick={() => document.getElementById("submit_task_modal").showModal()}
                     className="btn btn-primary w-full mb-3"
-                    disabled={isSubmitDisabled} // ✅ disabled after submit
+                    disabled={isSubmitDisabled}
                 >
                     {isSubmitDisabled ? "Task Submitted" : "Submit Task"}
                 </button>
@@ -154,8 +173,15 @@ const Details = () => {
             <dialog id="submit_task_modal" className="modal">
                 <div className="modal-box">
                     <h3 className="font-bold text-lg mb-2">Submit Your Task</h3>
+                    <input
+                        type="text"
+                        placeholder="Task Name (e.g., Task 1)"
+                        value={taskName}
+                        onChange={(e) => setTaskName(e.target.value)}
+                        className="input input-bordered w-full mb-2"
+                    />
                     <textarea
-                        className="textarea textarea-bordered w-full"
+                        className="textarea textarea-bordered w-full mb-2"
                         placeholder="Provide task links (GitHub / Drive / Live URL)"
                         value={taskText}
                         onChange={(e) => setTaskText(e.target.value)}
