@@ -6,7 +6,6 @@ const ShowUsers = () => {
   const [users, setUsers] = useState([]);
   const axiosSecure = UseAxiosSecure();
 
-  // ================= Fetch Users =================
   const getAllUsers = async () => {
     try {
       const res = await axiosSecure.get("/users");
@@ -20,14 +19,12 @@ const ShowUsers = () => {
     getAllUsers();
   }, []);
 
-  // ================= Role Cycle Logic =================
   const getNextRole = (currentRole) => {
     if (currentRole === "user") return "creator";
     if (currentRole === "creator") return "admin";
-    return "user"; // admin → user
+    return "user"; 
   };
 
-  // ================= Handle Role Change =================
   const handleRoleChange = async (user) => {
     const updatedRole = getNextRole(user.role);
 
@@ -36,7 +33,6 @@ const ShowUsers = () => {
         role: updatedRole,
       });
 
-      // Update UI instantly
       setUsers((prevUsers) =>
         prevUsers.map((u) =>
           u._id === user._id ? { ...u, role: updatedRole } : u
@@ -47,14 +43,12 @@ const ShowUsers = () => {
     }
   };
 
-  // ================= Role Badge Style =================
   const roleBadge = (role) => {
     if (role === "admin") return "badge-success";
     if (role === "creator") return "badge-warning";
     return "badge-secondary";
   };
 
-  // ================= Role Icon =================
   const roleIcon = (role) => {
     if (role === "admin") return <FaUserShield />;
     if (role === "creator") return <FaUserTie />;

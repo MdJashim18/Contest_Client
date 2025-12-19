@@ -6,20 +6,16 @@ const UserDashboard = () => {
   const { user } = useAuth();
   const axiosSecure = UseAxiosSecure();
   const [stats, setStats] = useState({ participated: 0, won: 0 });
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (user?.email) {
-      setLoading(true);
       axiosSecure
         .get(`/contest-stats?email=${user.email}`)
         .then((res) => {
           setStats(res.data);
-          setLoading(false);
         })
         .catch((err) => {
           console.error(err);
-          setLoading(false);
         });
     }
   }, [user, axiosSecure]);
@@ -28,7 +24,7 @@ const UserDashboard = () => {
 
   return (
     <div className="max-w-5xl mx-auto p-6 space-y-6">
-      {/* User Info */}
+
       <div className="flex items-center gap-6 bg-base-100 p-6 rounded-2xl shadow-lg">
         <img
           src={user.photoURL || "/default-profile.png"}
@@ -41,20 +37,18 @@ const UserDashboard = () => {
         </div>
       </div>
 
-      {/* Stats */}
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="bg-green-100 p-6 rounded-2xl shadow-lg text-center">
           <h3 className="text-xl font-semibold mb-2">Joined Contests</h3>
-          {loading ? (
-            <p>Loading...</p>
-          ) : (
-            <p className="text-3xl font-bold">{stats.participated}</p>
-          )}
+
+          <p className="text-3xl font-bold">{stats.participated}</p>
+
         </div>
 
         <div className="bg-yellow-100 p-6 rounded-2xl shadow-lg text-center">
           <h3 className="text-xl font-semibold mb-2">Won Contests</h3>
-          {loading ? <p>Loading...</p> : <p className="text-3xl font-bold">{stats.won}</p>}
+          <p className="text-3xl font-bold">{stats.won}</p>
         </div>
       </div>
     </div>

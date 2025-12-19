@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router';
 import UseAxiosSecure from '../../Hooks/UseAxiosSecure';
+import Swal from 'sweetalert2';
 
 const PaymentSuccess = () => {
     const [searchParams] = useSearchParams();
@@ -19,15 +20,16 @@ const PaymentSuccess = () => {
 
     const handleCompleteRegistration = async () => {
         try {
-            if (!sessionData?.userEmail) return alert("User info missing");
+            if (!sessionData?.userEmail){
+                return Swal.fire("User info missing");
+            }
 
-            // Patch contest participants
+            
             const res = await axiosSecure.patch(`/contest/register/${sessionData.contestId}`, {
                 userEmail: sessionData.userEmail
             });
 
             if (res.status === 200) {
-                // ✅ Save info in localStorage
                 localStorage.setItem(
                     'registeredContest',
                     JSON.stringify({
@@ -36,12 +38,12 @@ const PaymentSuccess = () => {
                     })
                 );
 
-                alert("Registration completed successfully!");
+                Swal.fire("Registration completed successfully!");
                 navigate(`/details/${sessionData.contestId}`);
             }
         } catch (error) {
             console.log(error);
-            alert(error.response?.data?.message || "Registration failed");
+            Swal.fire(error.response?.data?.message || "Registration failed");
         }
     };
 
@@ -50,7 +52,7 @@ const PaymentSuccess = () => {
     return (
         <div className="flex flex-col justify-center items-center h-screen gap-4">
             <h2 className="text-4xl text-green-600 font-bold">
-                ✅ Payment Successful!
+                Payment Successful!
             </h2>
             <p className="text-lg">Click below to complete registration</p>
             <button className="btn btn-primary" onClick={handleCompleteRegistration}>

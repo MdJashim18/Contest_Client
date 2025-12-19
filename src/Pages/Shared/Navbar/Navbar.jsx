@@ -3,6 +3,7 @@ import Logo from "../../../Components/Logo/Logo";
 import { NavLink } from "react-router";
 import useAuth from "../../../Hooks/useAuth";
 import useRole from "../../../Hooks/useRole";
+import { FaBars } from "react-icons/fa";
 
 const Navbar = () => {
   const { user, LogOut } = useAuth();
@@ -23,7 +24,7 @@ const Navbar = () => {
     <>
       <li><NavLink to="/">Home</NavLink></li>
       <li><NavLink to="/all-contests">All Contests</NavLink></li>
-      <li><NavLink to="/">Extra Section</NavLink></li>
+      <li><NavLink to="/ExtraSection">Extra Section</NavLink></li>
       
 
       
@@ -38,7 +39,7 @@ const Navbar = () => {
       <div className="navbar-start">
         <div className="dropdown">
           <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
-            ☰
+            <FaBars />
           </div>
           <ul className="menu menu-sm dropdown-content bg-base-100 rounded-box mt-3 w-52 p-2 shadow">
             {links}

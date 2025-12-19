@@ -29,7 +29,7 @@ const Login = () => {
         <div className="min-h-screen flex items-center justify-center bg-base-200 px-4">
             <div className="w-full max-w-md bg-base-100 rounded-2xl shadow-xl p-8">
 
-                {/* Title */}
+                
                 <h2 className="text-3xl font-bold text-center mb-2">
                     Welcome Back
                 </h2>
@@ -37,7 +37,7 @@ const Login = () => {
                     Login to your ContestHub account
                 </p>
 
-                {/* Login Form */}
+               
                 <form onSubmit={handleSubmit(handleLogin)} className="space-y-4">
                     <div>
                         <label className="label font-medium">Email</label>
@@ -59,21 +59,17 @@ const Login = () => {
                         />
                     </div>
 
-                    {/* <div className="text-right">
-                        <Link className="text-sm text-primary hover:underline">
-                            Forgot password?
-                        </Link>
-                    </div> */}
+                    
 
                     <button className="btn btn-neutral w-full mt-2">
                         Login
                     </button>
                 </form>
 
-                {/* Divider */}
+               
                 <div className="divider my-6">OR</div>
 
-                {/* Google Login */}
+               
                 <button
                     onClick={handleGoogleSignIn}
                     className="btn w-full bg-white text-black border hover:bg-gray-100 flex gap-2"
@@ -87,7 +83,6 @@ const Login = () => {
                     Continue with Google
                 </button>
 
-                {/* Footer */}
                 <p className="text-center mt-6 text-sm">
                     Don't have an account?{" "}
                     <Link to="/register" className="text-primary font-medium hover:underline">

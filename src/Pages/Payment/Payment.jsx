@@ -3,11 +3,12 @@ import { useParams } from 'react-router';
 import UseAxiosSecure from '../../Hooks/UseAxiosSecure';
 import { useQuery } from '@tanstack/react-query';
 import useAuth from '../../Hooks/useAuth';
+import Swal from 'sweetalert2';
 
 const Payment = () => {
   const { user } = useAuth();
   console.log(user)
-  const { id } = useParams(); 
+  const { id } = useParams();
   const axiosSecure = UseAxiosSecure();
 
   const { isLoading, data: contest } = useQuery({
@@ -19,25 +20,32 @@ const Payment = () => {
   });
 
   const handlePayment = async () => {
-    if (!user) {
-      return alert("User info missing");
-    }
+    if (!user || !contest) return;
 
-    const paymentInfo = {
-      cost: contest.price,
-      contestId: contest._id,
-      contestName: contest.name,
-      userId: user._id,
-      userName: user.name,
-      userEmail: user.email
-    };
+    try {
+      const paymentInfo = {
+        cost: contest.price,
+        contestId: contest._id,
+        contestName: contest.name,
+        userId: user._id,
+        userName: user.displayName || user.name,
+        userEmail: user.email
+      };
 
-    const res = await axiosSecure.post('/create-checkout-session', paymentInfo);
+      const res = await axiosSecure.post(
+        "/create-checkout-session",
+        paymentInfo
+      );
 
-    if (res.data?.url) {
-      window.location.href = res.data.url; // redirect to Stripe
+      if (res.data?.url) {
+        window.location.href = res.data.url;
+      }
+    } catch (error) {
+      console.error(error);
+      Swal.fire("Payment failed!");
     }
   };
+
 
   if (isLoading) return <p>Loading...</p>;
 

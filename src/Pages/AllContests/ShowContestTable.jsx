@@ -10,14 +10,12 @@ const ShowContestTable = () => {
     const [contests, setContests] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    // ================= Fetch My Contests =================
     useEffect(() => {
         if (user?.email) {
             console.log(user.email)
             axiosSecure
-                .get(`/contest`)
+                .get(`/contest?email=${user.email}`)
                 .then(res => {
-                    // Filter contests created by this user
                     const myContests = res.data.filter(
                         contest => contest.creatorEmail === user.email
                     );
@@ -28,7 +26,6 @@ const ShowContestTable = () => {
         }
     }, [axiosSecure, user]);
 
-    // ================= Delete Contest =================
     const handleDelete = (id) => {
         Swal.fire({
             title: 'Are you sure?',
@@ -95,7 +92,7 @@ const ShowContestTable = () => {
                                         {contest.name}
                                     </td>
 
-                                    <td>৳{contest.prizeMoney}</td>
+                                    <td>{contest.prizeMoney}</td>
 
                                     <td>
                                         <span
@@ -113,17 +110,17 @@ const ShowContestTable = () => {
                                     <td>
                                         <div className="flex flex-wrap gap-2 justify-center">
 
-                                            {/* Edit (only pending) */}
+                                            
                                             {contest.status === 'pending' && (
                                                 <Link
-                                                    to={`/dashboard/edit-contest/${contest._id}`}
+                                                    to={`/dashboard/UpdateContest/${contest._id}`}
                                                     className="btn btn-xs btn-info"
                                                 >
                                                     Edit
                                                 </Link>
                                             )}
 
-                                            {/* Delete (only pending) */}
+                                            
                                             {contest.status === 'pending' && (
                                                 <button
                                                     onClick={() =>
@@ -135,9 +132,9 @@ const ShowContestTable = () => {
                                                 </button>
                                             )}
 
-                                            {/* See Submissions */}
+                                           
                                             <Link
-                                                to={`/dashboard/contest-submissions/${contest._id}`}
+                                                to={`/dashboard/Submission/${contest._id}`}
                                                 className="btn btn-xs btn-outline"
                                             >
                                                 See Submissions

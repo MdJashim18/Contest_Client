@@ -16,7 +16,6 @@ const CreateContest = () => {
 
     const handleCreateContest = async (data) => {
         try {
-            // ================= Upload Image =================
             const imageFile = data.image[0];
             const formData = new FormData();
             formData.append('image', imageFile);
@@ -25,7 +24,6 @@ const CreateContest = () => {
             const imgRes = await axios.post(imageApiUrl, formData);
             const imageURL = imgRes.data.data.url;
 
-            // ================= Contest Object =================
             const contestData = {
                 name: data.name,
                 image: imageURL,
@@ -37,14 +35,13 @@ const CreateContest = () => {
                 deadline: new Date(data.deadline),
                 participantsCount: 0,
                 participants: [],
-                winner: null,
+                winner: {},
                 status: 'pending',
                 createdAt: new Date(),
                 tasks: {},
                 creatorEmail:data.CreatorEmailForTask
             };
 
-            // ================= Save to DB =================
             const res = await axiosSecure.post('/contest', contestData);
 
             if (res.data.insertedId) {
@@ -85,7 +82,7 @@ const CreateContest = () => {
                         />
                     </div>
 
-                    {/* Contest Name */}
+                    
                     <div>
                         <label className="label font-medium">Contest Name</label>
                         <input
@@ -101,7 +98,6 @@ const CreateContest = () => {
                         )}
                     </div>
 
-                    {/* Image */}
                     <div>
                         <label className="label font-medium">Contest Image</label>
                         <input
@@ -116,7 +112,6 @@ const CreateContest = () => {
                         )}
                     </div>
 
-                    {/* Description */}
                     <div>
                         <label className="label font-medium">Description</label>
                         <textarea
@@ -126,7 +121,7 @@ const CreateContest = () => {
                         />
                     </div>
 
-                    {/* Price */}
+                  
                     <div>
                         <label className="label font-medium">Participation Price</label>
                         <input
@@ -136,7 +131,7 @@ const CreateContest = () => {
                         />
                     </div>
 
-                    {/* Prize Money */}
+                   
                     <div>
                         <label className="label font-medium">Prize Money</label>
                         <input
@@ -146,7 +141,7 @@ const CreateContest = () => {
                         />
                     </div>
 
-                    {/* Task Instruction */}
+                    
                     <div>
                         <label className="label font-medium">Task Instruction</label>
                         <input
@@ -156,7 +151,7 @@ const CreateContest = () => {
                         />
                     </div>
 
-                    {/* Contest Type */}
+                   
                     <div>
                         <label className="label font-medium">Contest Type</label>
                         <select
@@ -168,10 +163,12 @@ const CreateContest = () => {
                             <option value="Development">Development</option>
                             <option value="Writing">Writing</option>
                             <option value="Photography">Photography</option>
+                            <option value="Programming">Programming</option>
+                            <option value="Database">Database</option>
                         </select>
                     </div>
 
-                    {/* Deadline (NO react-datepicker) */}
+                   
                     <div>
                         <label className="label font-medium">Deadline</label>
                         <input

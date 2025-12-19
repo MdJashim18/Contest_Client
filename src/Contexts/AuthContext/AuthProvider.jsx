@@ -5,42 +5,62 @@ import { auth } from '../../firebase/firebase.init';
 
 
 const googleProvider = new GoogleAuthProvider()
-const AuthProvider = ({children}) => {
+const AuthProvider = ({ children }) => {
 
-    const [user,setUser] = useState(null)
-    const [loading,setLoading] = useState(true)
+    const [user, setUser] = useState(null)
+    const [loading, setLoading] = useState(true)
 
-    const registerUser = (email,password)=>{
+    const registerUser = (email, password) => {
         setLoading(true)
-        return createUserWithEmailAndPassword(auth,email,password)
+        return createUserWithEmailAndPassword(auth, email, password)
     }
 
-    const signInUser = (email,password)=>{
+    const signInUser = (email, password) => {
         setLoading(true)
-        return signInWithEmailAndPassword(auth,email,password)
+        return signInWithEmailAndPassword(auth, email, password)
     }
-    const signInGoogle = ()=>{
+    const signInGoogle = () => {
         setLoading(true)
-        return signInWithPopup(auth,googleProvider)
+        return signInWithPopup(auth, googleProvider)
     }
-    const LogOut = ()=>{
+    const LogOut = () => {
         setLoading(true)
         return signOut(auth)
     }
 
-    const updateUserProfile = (profile)=>{
-        return updateProfile(auth.currentUser,profile)
+    const updateUserProfile = (profile) => {
+        return updateProfile(auth.currentUser, profile)
     }
 
-    useEffect(()=>{
-        const unSubscribe = onAuthStateChanged(auth,(currentUser)=>{
+    useEffect(() => {
+        const unSubscribe = onAuthStateChanged(auth, (currentUser) => {
             setUser(currentUser)
+            console.log('Current User : ', currentUser)
+            if (currentUser) {
+                const loggedUser = { email: currentUser.email }
+                fetch('https://contest-server-ten.vercel.app/getToken', {
+                    method: 'POST',
+                    headers: {
+                        'content-type': "application/json"
+                    },
+                    body: JSON.stringify(loggedUser)
+                })
+                    .then(res => res.json())
+                    .then(data => {
+                        console.log('After getting token : ', data)
+                        localStorage.setItem('token', data.token);
+                    })
+                
+            }
+            else{
+                localStorage.removeItem('token')
+            }
             setLoading(false)
         })
-        return ()=>{
+        return () => {
             unSubscribe()
         }
-    },[])
+    }, [])
 
     const authInfo = {
         user,

@@ -1,6 +1,7 @@
 import { Link, NavLink, Outlet } from "react-router";
 import { CiDeliveryTruck } from "react-icons/ci";
 import useRole from "../Hooks/useRole";
+import { FaBars } from "react-icons/fa";
 
 const DashboardLayout = () => {
   const [role, loading] = useRole();
@@ -18,23 +19,23 @@ const DashboardLayout = () => {
     <div className="drawer lg:drawer-open max-w-7xl mx-auto">
       <input id="dashboard-drawer" type="checkbox" className="drawer-toggle" />
 
-      {/* Main Content */}
+     
       <div className="drawer-content flex flex-col min-h-screen bg-base-100">
-        {/* Navbar */}
+        
         <nav className="navbar bg-base-300 px-4 shadow-md">
           <label htmlFor="dashboard-drawer" className="btn btn-ghost lg:hidden">
-            ☰
+            <FaBars />
           </label>
           <span className="text-lg font-semibold ml-2">Contest Hub Dashboard</span>
         </nav>
 
-        {/* Outlet for nested routes */}
+        
         <div className="p-6 flex-1">
           <Outlet />
         </div>
       </div>
 
-      {/* Sidebar */}
+     
       <div className="drawer-side">
         <label htmlFor="dashboard-drawer" className="drawer-overlay"></label>
         <aside className="menu p-6 w-64 bg-base-200 min-h-full shadow-lg rounded-r-xl">
@@ -50,6 +51,11 @@ const DashboardLayout = () => {
 
             {role === "user" && (
               <>
+                <li>
+                  <NavLink to="/dashboard/user" className={linkClass}>
+                    Dashboard
+                  </NavLink>
+                </li>
                 <li>
                   <NavLink to="/dashboard/user-profile" className={linkClass}>
                     My Profile
@@ -71,6 +77,11 @@ const DashboardLayout = () => {
             {role === "creator" && (
               <>
                 <li>
+                  <NavLink to="/dashboard/creator" className={linkClass}>
+                    Dashboard
+                  </NavLink>
+                </li>
+                <li>
                   <NavLink to="/dashboard/CreateContest" className={linkClass}>
                     Add Contests
                   </NavLink>
@@ -87,7 +98,7 @@ const DashboardLayout = () => {
               <>
                 <li>
                   <NavLink to="/dashboard/admin" className={linkClass}>
-                    Admin Dashboard
+                    Dashboard
                   </NavLink>
                 </li>
                 <li>
@@ -96,7 +107,7 @@ const DashboardLayout = () => {
                   </NavLink>
                 </li>
                 <li>
-                  <NavLink to="/dashboard/admin/manage-contests" className={linkClass}>
+                  <NavLink to="/dashboard/CreateContest" className={linkClass}>
                     Manage Contests
                   </NavLink>
                 </li>

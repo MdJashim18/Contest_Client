@@ -12,7 +12,6 @@ import {
     Legend,
     ResponsiveContainer,
 } from 'recharts';
-import { useParams } from 'react-router';
 
 const COLORS = ['#22c55e', '#ef4444'];
 
@@ -22,7 +21,7 @@ const UserProfile = () => {
     const [profile, setProfile] = useState({});
     const [stats, setStats] = useState({ won: 0, participated: 0 });
     const [open, setOpen] = useState(false);
-    const { _id } = useParams();
+   
 
     const {
         register,
@@ -31,18 +30,36 @@ const UserProfile = () => {
         reset,
     } = useForm();
 
-    // ================= Fetch profile & stats =================
     useEffect(() => {
-        if (user?.email) {
-            axiosSecure.get(`/users/profile?email=${user.email}`)
-                .then(res => setProfile(res.data));
+        const fetchData = async () => {
+            if (!user?.email) return;
 
-            axiosSecure.get(`/contest-stats?email=${user.email}`)
-                .then(res => setStats(res.data));
-        }
-    }, [user, axiosSecure]);
+            try {
+                const res = await axiosSecure.get('/users');
+                
 
-    // ================= Update profile =================
+                const currentUser = Array.isArray(res.data)
+                    ? res.data.find(u => u.email?.toLowerCase() === user.email.toLowerCase())
+                    : res.data.email?.toLowerCase() === user.email.toLowerCase()
+                        ? res.data
+                        : null;
+
+                if (currentUser) setProfile(currentUser);
+
+                
+                const statsRes = await axiosSecure.get(
+                    `/contest-stats?email=${(user.email)}`
+                );
+                setStats(statsRes.data);
+            } catch (err) {
+                console.error(err);
+            }
+        };
+
+        fetchData();
+    }, [user?.email, axiosSecure]);
+    
+
     const handleUpdate = async (data) => {
         try {
             if (!user?.email) {
@@ -65,21 +82,21 @@ const UserProfile = () => {
                 photoURL = imgRes.data.data.url;
             }
 
-            // Firebase profile update
             await updateUserProfile({
                 displayName: data.name,
                 photoURL: photoURL,
             });
 
             const updatedInfo = {
-                email: user.email,
                 name: data.name,
                 photoURL: photoURL,
                 address: data.address,
             };
 
-            await axiosSecure.patch(`/users/profile/${_id}`, updatedInfo);
+            
+            await axiosSecure.patch(`/users/profile/${(profile.email)}`, updatedInfo);
 
+          
             setProfile(prev => ({ ...prev, ...updatedInfo }));
             reset();
             setOpen(false);
@@ -101,39 +118,27 @@ const UserProfile = () => {
         }
     };
 
-    // ================= Pie chart data =================
     const pieData = [
         { name: 'Won', value: stats.won },
-        {
-            name: 'Lost',
-            value: Math.max(stats.participated - stats.won, 0),
-        },
+        { name: 'Lost', value: Math.max(stats.participated - stats.won, 0) },
     ];
 
     return (
         <div className="max-w-5xl mx-auto p-4 sm:p-6 space-y-8">
-
-            {/* ================= Profile Card ================= */}
-            <div className="bg-base-100 rounded-2xl shadow-lg p-6
-            flex flex-col sm:flex-row items-center sm:items-start gap-6">
-
+            
+            <div className="bg-base-100 rounded-2xl shadow-lg p-6 flex flex-col sm:flex-row items-center sm:items-start gap-6">
                 <img
                     src={profile.photoURL || user?.photoURL}
                     alt="profile"
                     className="w-24 h-24 sm:w-32 sm:h-32 rounded-full object-cover border"
                 />
-
                 <div className="flex-1 text-center sm:text-left">
-                    <h2 className="text-2xl font-bold">
-                        {profile.name || user?.displayName}
-                    </h2>
+                    <h2 className="text-2xl font-bold">{profile.name || user?.displayName}</h2>
                     <p className="text-gray-500">{user?.email}</p>
-
                     <p className="mt-2">
                         <span className="font-medium">Address:</span>{' '}
                         {profile.address || 'Not added'}
                     </p>
-
                     <button
                         onClick={() => setOpen(true)}
                         className="btn btn-primary btn-sm mt-4"
@@ -143,14 +148,13 @@ const UserProfile = () => {
                 </div>
             </div>
 
-            {/* ================= Update Modal ================= */}
+           
             {open && (
                 <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 px-3">
                     <div className="bg-base-100 rounded-2xl shadow-lg p-6 w-full max-w-md">
                         <h3 className="text-xl font-semibold mb-4 text-center">
                             Update Profile
                         </h3>
-
                         <form onSubmit={handleSubmit(handleUpdate)} className="space-y-4">
                             <div>
                                 <label className="label">Name</label>
@@ -160,21 +164,17 @@ const UserProfile = () => {
                                     className="input input-bordered w-full"
                                 />
                                 {errors.name && (
-                                    <span className="text-red-500 text-sm">
-                                        Name is required
-                                    </span>
+                                    <span className="text-red-500 text-sm">Name is required</span>
                                 )}
                             </div>
-
                             <div>
                                 <label className="label">Address</label>
                                 <input
                                     defaultValue={profile.address}
-                                    {...register('address', { required: true })}
+                                    {...register('address')}
                                     className="input input-bordered w-full"
                                 />
                             </div>
-
                             <div>
                                 <label className="label">Profile Photo</label>
                                 <input
@@ -183,11 +183,8 @@ const UserProfile = () => {
                                     className="file-input file-input-bordered w-full"
                                 />
                             </div>
-
                             <div className="flex gap-3 justify-end">
-                                <button className="btn btn-success">
-                                    Save
-                                </button>
+                                <button className="btn btn-success">Save</button>
                                 <button
                                     type="button"
                                     onClick={() => setOpen(false)}
@@ -201,12 +198,8 @@ const UserProfile = () => {
                 </div>
             )}
 
-            {/* ================= Contest Performance ================= */}
             <div className="bg-base-100 rounded-2xl shadow-lg p-6">
-                <h3 className="text-xl font-semibold mb-4 text-center">
-                    Contest Performance
-                </h3>
-
+                <h3 className="text-xl font-semibold mb-4 text-center">Contest Performance</h3>
                 <div className="w-full h-64">
                     <ResponsiveContainer>
                         <PieChart>
@@ -218,10 +211,7 @@ const UserProfile = () => {
                                 label
                             >
                                 {pieData.map((_, index) => (
-                                    <Cell
-                                        key={index}
-                                        fill={COLORS[index % COLORS.length]}
-                                    />
+                                    <Cell key={index} fill={COLORS[index % COLORS.length]} />
                                 ))}
                             </Pie>
                             <Tooltip />
@@ -229,10 +219,8 @@ const UserProfile = () => {
                         </PieChart>
                     </ResponsiveContainer>
                 </div>
-
                 <p className="text-center mt-4">
-                    Won <b>{stats.won}</b> out of{' '}
-                    <b>{stats.participated}</b> contests
+                    Won <b>{stats.won}</b> out of <b>{stats.participated}</b> contests
                 </p>
             </div>
         </div>

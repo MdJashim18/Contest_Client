@@ -1,79 +1,109 @@
-import React, { useEffect, useState } from 'react';
-import UseAxiosSecure from '../../Hooks/UseAxiosSecure';
-import Swal from 'sweetalert2';
-import { Link } from 'react-router';
+import React from "react";
+import UseAxiosSecure from "../../Hooks/UseAxiosSecure";
+import Swal from "sweetalert2";
+import { Link } from "react-router";
+import {
+    useQuery,
+    useQueryClient,
+} from "@tanstack/react-query";
 
 const AllContestAdmin = () => {
     const axiosSecure = UseAxiosSecure();
-    const [contests, setContests] = useState([]);
+    const queryClient = useQueryClient();
 
-    // ================= Fetch Contests =================
-    useEffect(() => {
-        axiosSecure.get('/contest')
-            .then(res => {
-                setContests(res.data);
-            })
-            .catch(err => {
-                console.error(err);
-            });
-    }, [axiosSecure]);
+    const {
+        data: contests = [],
+        isLoading,
+        isError,
+        error,
+    } = useQuery({
+        queryKey: ["contests"],
+        queryFn: async () => {
+            const res = await axiosSecure.get("/contest");
+            return res.data;
+        },
+    });
 
-    // ================= Approve Contest =================
-    const handleConfirm = (id) => {
-        axiosSecure.patch(`/contest/approve/${id}`)
-            .then(res => {
-                if (res.data.modifiedCount > 0) {
-                    Swal.fire('Approved!', 'Contest has been approved.', 'success');
-                    setContests(prev =>
-                        prev.map(c =>
-                            c._id === id ? { ...c, status: 'approved' } : c
-                        )
-                    );
-                }
-            });
-    };
-
-    // ================= Reject Contest =================
-    const handleReject = (id) => {
-        axiosSecure.patch(`/contest/reject/${id}`)
-            .then(res => {
-                if (res.data.modifiedCount > 0) {
-                    Swal.fire('Rejected!', 'Contest has been rejected.', 'info');
-                    setContests(prev =>
-                        prev.map(c =>
-                            c._id === id ? { ...c, status: 'rejected' } : c
-                        )
-                    );
-                }
-            });
-    };
-
-    // ================= Delete Contest =================
-    const handleDelete = (id) => {
-        Swal.fire({
-            title: 'Are you sure?',
-            text: 'This contest will be permanently deleted!',
-            icon: 'warning',
+    const handleConfirm = async (id) => {
+        const confirm = await Swal.fire({
+            title: "Approve contest?",
+            icon: "question",
             showCancelButton: true,
-            confirmButtonText: 'Yes, delete it'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                axiosSecure.delete(`/contest/${id}`)
-                    .then(res => {
-                        if (res.data.deletedCount > 0) {
-                            Swal.fire('Deleted!', 'Contest has been deleted.', 'success');
-                            setContests(prev => prev.filter(c => c._id !== id));
-                        }
-                    });
-            }
+            confirmButtonText: "Approve",
         });
+
+        if (!confirm.isConfirmed) return;
+
+        const res = await axiosSecure.patch(`/contest/approve/${id}`);
+        if (res.data.modifiedCount > 0) {
+            Swal.fire("Approved!", "Contest approved successfully", "success");
+            queryClient.invalidateQueries(["contests"]);
+        }
     };
+
+    const handleReject = async (id) => {
+        const confirm = await Swal.fire({
+            title: "Reject contest?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Reject",
+        });
+
+        if (!confirm.isConfirmed) return;
+
+        const res = await axiosSecure.patch(`/contest/reject/${id}`);
+        if (res.data.modifiedCount > 0) {
+            Swal.fire("Rejected!", "Contest rejected", "info");
+            queryClient.invalidateQueries(["contests"]);
+        }
+    };
+
+    const handleDelete = async (id) => {
+        const confirm = await Swal.fire({
+            title: "Delete contest?",
+            text: "This action cannot be undone",
+            icon: "error",
+            showCancelButton: true,
+            confirmButtonText: "Delete",
+        });
+
+        if (!confirm.isConfirmed) return;
+
+        const res = await axiosSecure.delete(`/contest/${id}`);
+        if (res.data.deletedCount > 0) {
+            Swal.fire("Deleted!", "Contest deleted successfully", "success");
+            queryClient.invalidateQueries(["contests"]);
+        }
+    };
+
+    if (isLoading) {
+        return (
+            <p className="text-center mt-10 text-lg">
+                Loading contests...
+            </p>
+        );
+    }
+
+    if (isError) {
+        return (
+            <p className="text-center mt-10 text-red-500">
+                {error.message}
+            </p>
+        );
+    }
 
     return (
-        <div className="p-6">
-            <h1 className="text-2xl font-bold mb-4">See All Contests</h1>
+        <div className="p-4 md:p-8">
+            <div className="mb-6">
+                <h1 className="text-3xl font-bold text-gray-800">
+                    All Contests (Admin)
+                </h1>
+                <p className="text-gray-600">
+                    Approve, reject or delete contests
+                </p>
+            </div>
 
-            <div className="overflow-x-auto">
+            <div className="overflow-x-auto bg-base-100 shadow rounded-lg">
                 <table className="table table-zebra w-full">
                     <thead>
                         <tr>
@@ -83,73 +113,80 @@ const AllContestAdmin = () => {
                             <th>Price</th>
                             <th>Prize</th>
                             <th>Status</th>
-                            <th>Actions</th>
+                            <th className="text-center">Actions</th>
                             <th>Details</th>
                         </tr>
                     </thead>
 
                     <tbody>
-                        {contests.map((contest, index) => (
-                            <tr key={contest._id}>
-                                <td>{index + 1}</td>
-                                <td>{contest.name}</td>
-                                <td>{contest.contestType}</td>
-                                <td>${contest.price}</td>
-                                <td>${contest.prizeMoney}</td>
-                                <td>
-                                    <span
-                                        className={`badge ${contest.status === 'approved'
-                                                ? 'badge-success'
-                                                : contest.status === 'rejected'
-                                                    ? 'badge-error'
-                                                    : 'badge-warning'
-                                            }`}
-                                    >
-                                        {contest.status || 'pending'}
-                                    </span>
-                                </td>
-                                <td className="space-x-2">
-                                    <button
-                                        onClick={() => handleConfirm(contest._id)}
-                                        className="btn btn-xs btn-success"
-                                        disabled={contest.status === 'approved'}
-                                    >
-                                        Confirm
-                                    </button>
+                        {contests.length ? (
+                            contests.map((contest, index) => (
+                                <tr key={contest._id}>
+                                    <td>{index + 1}</td>
+                                    <td className="font-medium">{contest.name}</td>
+                                    <td>{contest.contestType}</td>
+                                    <td>${contest.price}</td>
+                                    <td>${contest.prizeMoney}</td>
 
-                                    <button
-                                        onClick={() => handleReject(contest._id)}
-                                        className="btn btn-xs btn-warning"
-                                        disabled={contest.status === 'rejected'}
-                                    >
-                                        Reject
-                                    </button>
+                                    <td>
+                                        <span
+                                            className={`badge ${contest.status === "approved"
+                                                    ? "badge-success"
+                                                    : contest.status === "rejected"
+                                                        ? "badge-error"
+                                                        : "badge-warning"
+                                                }`}
+                                        >
+                                            {contest.status || "pending"}
+                                        </span>
+                                    </td>
 
-                                    <button
-                                        onClick={() => handleDelete(contest._id)}
-                                        className="btn btn-xs btn-error"
-                                    >
-                                        Delete
-                                    </button>
-                                </td>
-                                <td>
-                                    <Link
-                                        to = {`/dashboard/contest/${contest._id}`}
-                                        className="btn btn-xs btn-info"
-                                    >
-                                        Details
-                                    </Link>
+                                    <td>
+                                        <div className="flex flex-wrap gap-2 justify-center">
+                                            <button
+                                                onClick={() => handleConfirm(contest._id)}
+                                                className="btn btn-xs btn-success"
+                                                disabled={contest.status === "approved"}
+                                            >
+                                                Approve
+                                            </button>
+
+                                            <button
+                                                onClick={() => handleReject(contest._id)}
+                                                className="btn btn-xs btn-warning"
+                                                disabled={contest.status === "rejected"}
+                                            >
+                                                Reject
+                                            </button>
+
+                                            <button
+                                                onClick={() => handleDelete(contest._id)}
+                                                className="btn btn-xs btn-error"
+                                            >
+                                                Delete
+                                            </button>
+                                        </div>
+                                    </td>
+
+                                    <td>
+                                        <Link
+                                            to={`/dashboard/contest/${contest._id}`}
+                                            className="btn btn-xs btn-info"
+                                        >
+                                            View
+                                        </Link>
+                                    </td>
+                                </tr>
+                            ))
+                        ) : (
+                            <tr>
+                                <td colSpan="8" className="text-center py-6">
+                                    No contests found
                                 </td>
                             </tr>
-                        ))}
+                        )}
                     </tbody>
                 </table>
-
-                {contests.length === 0 && (
-                    <p className="text-center mt-4 text-gray-500">
-                        No contests found.
-                    </p>
-                )}
             </div>
         </div>
     );

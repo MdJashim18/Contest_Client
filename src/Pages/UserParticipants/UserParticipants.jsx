@@ -9,18 +9,16 @@ const UserParticipants = () => {
 
     const [contests, setContests] = useState([]);
     const [sortAsc, setSortAsc] = useState(true);
-    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const fetchContests = async () => {
             try {
-                setLoading(true);
-                const res = await axiosSecure.get('/contest');
+                const res = await axiosSecure.get('/public-contest');
                 let userContests = res.data.filter(contest =>
                     contest.participants.some(p => p.userEmail === user.email)
                 );
 
-                // Sort by deadline
+                
                 userContests.sort((a, b) => {
                     const dateA = new Date(a.deadline);
                     const dateB = new Date(b.deadline);
@@ -28,10 +26,8 @@ const UserParticipants = () => {
                 });
 
                 setContests(userContests);
-                setLoading(false);
             } catch (err) {
                 console.error(err);
-                setLoading(false);
             }
         };
 
@@ -50,10 +46,6 @@ const UserParticipants = () => {
             >
                 Sort by Deadline {sortAsc ? '↑' : '↓'}
             </button>
-
-            {loading ? (
-                <p>Loading...</p>
-            ) : (
                 <div className="overflow-x-auto">
                     <table className="table w-full border">
                         <thead>
@@ -91,7 +83,6 @@ const UserParticipants = () => {
                         </tbody>
                     </table>
                 </div>
-            )}
         </div>
     );
 };

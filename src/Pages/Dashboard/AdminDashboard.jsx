@@ -1,83 +1,138 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import UseAxiosSecure from "../../Hooks/UseAxiosSecure";
+import Swal from "sweetalert2";
 
 const AdminDashboard = () => {
+    const axiosSecure = UseAxiosSecure();
+
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(true);
     const [updatingId, setUpdatingId] = useState(null);
-    const axiosSecure = UseAxiosSecure
-
-    
-    const fetchUsers = async () => {
-        try {
-            const res = await axiosSecure.get("/users");
-            setUsers(res.data);
-            setLoading(false);
-        } catch (error) {
-            console.log(error);
-        }
-    };
 
     useEffect(() => {
+        const fetchUsers = async () => {
+            try {
+                const res = await axiosSecure.get("/users");
+                setUsers(res.data);
+            } catch (err) {
+                console.error(err);
+            } finally {
+                setLoading(false);
+            }
+        };
+
         fetchUsers();
-    }, []);
+    }, [axiosSecure]);
 
     const handleRoleChange = async (userId, newRole) => {
         try {
+            const confirm = await Swal.fire({
+                title: "Change user role?",
+                text: `Set role to ${newRole}`,
+                icon: "question",
+                showCancelButton: true,
+                confirmButtonText: "Yes",
+            });
+
+            if (!confirm.isConfirmed) return;
+
             setUpdatingId(userId);
-            await axios.patch(`/users/${userId}/role`, {
+
+            await axiosSecure.patch(`/users/${userId}`, {
                 role: newRole,
             });
-            
-            setUsers(users.map(u => u._id === userId ? { ...u, role: newRole } : u));
-            setUpdatingId(null);
-        } catch (error) {
-            console.log(error);
+
+            setUsers(prev =>
+                prev.map(u =>
+                    u._id === userId ? { ...u, role: newRole } : u
+                )
+            );
+
+            Swal.fire("Role updated", "", "success");
+        } catch (err) {
+            console.error(err);
+            Swal.fire("Failed to update role", "", "error");
+        } finally {
             setUpdatingId(null);
         }
     };
 
-    if (loading) return <p>Loading users...</p>;
+    if (loading) {
+        return <p className="text-center mt-10">Loading users...</p>;
+    }
 
     return (
-        <div className="p-6">
-            <h1 className="text-3xl font-bold mb-4">Admin Dashboard</h1>
-            <p className="mb-6">Approve contests | Change roles</p>
+        <div className="p-4 md:p-8">
+            <div className="mb-6">
+                <h1 className="text-3xl font-bold text-gray-800">
+                    Admin Dashboard
+                </h1>
+                <p className="text-gray-600">
+                    Manage users & roles
+                </p>
+            </div>
 
-            <table className="table-auto border-collapse border border-gray-300 w-full">
-                <thead>
-                    <tr className="bg-gray-100">
-                        <th className="border px-4 py-2">#</th>
-                        <th className="border px-4 py-2">Name</th>
-                        <th className="border px-4 py-2">Email</th>
-                        <th className="border px-4 py-2">Role</th>
-                        <th className="border px-4 py-2">Change Role</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {users.map((user, index) => (
-                        <tr key={user._id}>
-                            <td className="border px-4 py-2">{index + 1}</td>
-                            <td className="border px-4 py-2">{user.name}</td>
-                            <td className="border px-4 py-2">{user.email}</td>
-                            <td className="border px-4 py-2">{user.role}</td>
-                            <td className="border px-4 py-2">
-                                <select
-                                    value={user.role}
-                                    onChange={(e) => handleRoleChange(user._id, e.target.value)}
-                                    disabled={updatingId === user._id}
-                                    className="border px-2 py-1 rounded"
-                                >
-                                    <option value="user">User</option>
-                                    <option value="creator">Creator</option>
-                                    <option value="admin">Admin</option>
-                                </select>
-                            </td>
+            <div className="overflow-x-auto bg-base-100 shadow rounded-lg">
+                <table className="table table-zebra w-full">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Role</th>
+                            <th>Change Role</th>
                         </tr>
-                    ))}
-                </tbody>
-            </table>
+                    </thead>
+
+                    <tbody>
+                        {users.length ? (
+                            users.map((user, index) => (
+                                <tr key={user._id}>
+                                    <td>{index + 1}</td>
+                                    <td>{user.name || user.displayName}</td>
+                                    <td>{user.email}</td>
+                                    <td>
+                                        <span
+                                            className={`badge ${
+                                                user.role === "admin"
+                                                    ? "badge-error"
+                                                    : user.role === "creator"
+                                                    ? "badge-warning"
+                                                    : "badge-info"
+                                            }`}
+                                        >
+                                            {user.role}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <select
+                                            value={user.role}
+                                            disabled={updatingId === user._id}
+                                            onChange={(e) =>
+                                                handleRoleChange(
+                                                    user._id,
+                                                    e.target.value
+                                                )
+                                            }
+                                            className="select select-bordered select-sm w-full max-w-xs"
+                                        >
+                                            <option value="user">User</option>
+                                            <option value="creator">Creator</option>
+                                            <option value="admin">Admin</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                            ))
+                        ) : (
+                            <tr>
+                                <td colSpan="5" className="text-center">
+                                    No users found
+                                </td>
+                            </tr>
+                        )}
+                    </tbody>
+                </table>
+            </div>
         </div>
     );
 };

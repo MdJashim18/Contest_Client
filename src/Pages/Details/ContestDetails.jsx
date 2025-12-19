@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import UseAxiosSecure from '../../Hooks/UseAxiosSecure';
+import Swal from 'sweetalert2';
 
 const ContestDetails = () => {
     const { id } = useParams();
@@ -10,7 +11,7 @@ const ContestDetails = () => {
     const [isRegistered, setIsRegistered] = useState(false);
     const [taskText, setTaskText] = useState('');
     const [timeLeft, setTimeLeft] = useState('');
-    console.log(contest)
+   
 
    
     useEffect(() => {
@@ -53,11 +54,10 @@ const ContestDetails = () => {
 
   
     const handleSubmitTask = () => {
-        console.log('Task Submitted:', taskText);
 
         setTaskText('');
         document.getElementById('submit_task_modal').close();
-        alert('Task Submitted Successfully!');
+        Swal.fire('Task Submitted Successfully!');
     };
 
     if (!contest) {
