@@ -31,6 +31,9 @@ import Submission from "../Pages/Submission/Submission";
 import PopularContests from "../Pages/Home/PopularContests/PopularContests";
 import Error from "../Pages/Error/Error";
 import ExtraSection from "../Pages/ExtraSection/ExtraSection";
+import About from "../Pages/Home/About/About";
+import Contact from "../Pages/Home/Contact/Contact";
+import FAQ from "../Pages/Home/FAQ/FAQ";
 
 
 
@@ -46,9 +49,7 @@ export const router = createBrowserRouter([
       },
       {
         path: '/details/:id',
-        element: <PrivateRouter>
-          <Details></Details>
-        </PrivateRouter>
+        element: <Details></Details>
       },
       {
         path: '/payment/:id',
@@ -73,6 +74,18 @@ export const router = createBrowserRouter([
       {
         path:'/ExtraSection',
         element:<ExtraSection></ExtraSection>
+      },
+      {
+        path: '/About',
+        element: <About></About>
+      },
+      {
+        path: '/Contact',
+        element: <Contact></Contact>
+      },
+      {
+        path:'/FAQ',
+        element:<FAQ></FAQ>
       }
     ],
   },

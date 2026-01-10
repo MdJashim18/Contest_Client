@@ -6,7 +6,9 @@ import Navbar from '../Pages/Shared/Navbar/Navbar';
 const RootLayouts = () => {
     return (
         <div className='max-w-7xl mx-auto'>
-            <Navbar></Navbar>
+            <div className='sticky top-0 z-50'>
+                <Navbar></Navbar>
+            </div>
             <Outlet></Outlet>
             <Footer></Footer>
         </div>
